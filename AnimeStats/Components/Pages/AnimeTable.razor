@@ -1,0 +1,36 @@
+﻿@* @page "/anime"
+@using Service
+@inject IAnimeService AnimeService
+
+<h3>AnimeTable</h3>
+
+@if (AnimeList == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <MudTable Items="AnimeList" Hover="true" SortLabel="Sort By" Elevation="0">
+        <HeaderContent>
+            <MudTh><MudTableSortLabel SortBy="new Func<Anime, object>(x=>x.Title)">Title</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Anime, object>(x=>x.)">Score</MudTableSortLabel></MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Title">@context.Title_English</MudTd>
+            <MudTd DataLabel="Score">@context.Score</MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager PageSizeOptions="new int[]{10, 30}" />
+        </PagerContent>
+    </MudTable>
+}
+
+@code {
+    IEnumerable<AnimeData> AnimeList;
+
+    protected override async Task OnInitializedAsync()
+    {
+        AnimeList = await AnimeService.SetPopularAnime();
+    }
+}
+ *@

@@ -1,0 +1,50 @@
+﻿@using MudBlazor
+@using System
+
+<MudCard>
+    <MudCardHeader>
+        <CardHeaderAvatar>
+            <MudAvatar Color="@AvatarColor">@AvatarText</MudAvatar>
+        </CardHeaderAvatar>
+        <CardHeaderContent>
+            <MudText Typo="Typo.body1">@Title</MudText>
+            <MudText Typo="Typo.body2">@Subtitle</MudText>
+        </CardHeaderContent>
+        <CardHeaderActions>
+            <MudIconButton Icon="@IconSettings" Color="Color.Default" />
+        </CardHeaderActions>
+    </MudCardHeader>
+    <MudCardMedia Image="@ImageUrl" Height="250" />
+    <MudCardContent>
+        <MudText Typo="Typo.body2">@CardContent</MudText>
+    </MudCardContent>
+    <MudCardActions>
+        <MudIconButton Icon="@IconFavorite" Color="Color.Default" />
+        <MudIconButton Icon="@IconShare" Color="Color.Default" />
+    </MudCardActions>
+</MudCard>
+
+@code {
+    [Parameter]
+    public string Title { get; set; } = "Urasawa's Monster";
+
+    [Parameter]
+    public string Subtitle { get; set; } = "Heinrich Lunge";
+
+    [Parameter]
+    public string AvatarText { get; set; } = "I";
+
+    [Parameter]
+    public Color AvatarColor { get; set; } = Color.Secondary;
+
+    [Parameter]
+    public string ImageUrl { get; set; } = "https://tse1.explicit.bing.net/th?id=OIP.zeDdyQ5syqVVjSp2r68uAAHaFj&pid=Api";
+
+    [Parameter]
+    public string CardContent { get; set; } = "This photo was taken in a small village in Istra Croatia.";
+
+    // Icons
+    private string IconSettings => Icons.Material.Filled.Settings;
+    private string IconFavorite => Icons.Material.Filled.Favorite;
+    private string IconShare => Icons.Material.Filled.Share;
+}
