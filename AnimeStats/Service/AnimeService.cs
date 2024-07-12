@@ -1,8 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
-using System.Numerics;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
 
 namespace AnimeStats.Service
 {
@@ -63,11 +62,11 @@ namespace AnimeStats.Service
     public class AnimeService(DatabaseEFCore database) : IAnimeService
     {
         readonly DatabaseEFCore db = database;
-        readonly HttpClient httpClient = new();
+       //readonly HttpClient httpClient = new();
 
         public async Task<IEnumerable<Anime>> SetPopularAnime()
         {
-            List<Anime> animeList = new List<Anime>();
+            List<Anime> animeList = [];
 
             var httpClient = new HttpClient();
             var response = await httpClient.GetAsync("https://api.jikan.moe/v4/top/anime?type=tv&filter=bypopularity&limit=10&page=2");
@@ -92,22 +91,18 @@ namespace AnimeStats.Service
                     if (existingAnime != null)
                     {
                         // Ensure the Seasons list is initialized
-                        if (existingAnime.Seasons == null)
-                        {
-                            existingAnime.Seasons = new List<Season>();
-                        }
+                        int amountOfSeasons = await db.Seasons.Where(s => s.AnimeId == existingAnime.Id).CountAsync();
 
                         Season season = new Season
                         {
                             AnimeId = existingAnime.Id,
-                            Number = existingAnime.Seasons.Count + 1,
+                            Number = amountOfSeasons + 1,
                             AudienceScore = data?.Score ?? 0,
                             Premier = data.Aired.From,
                             Finale = data.Aired.To,
                             AmtOfScorers = data?.ScoredBy ?? 0,
                         };
-                        existingAnime.Seasons.Add(season);
-                        db.Animes.Update(existingAnime);
+                        db.Seasons.Add(season);
                     }
                     else
                     {
