@@ -1,4 +1,4 @@
-﻿@* @page "/anime"
+﻿@page "/anime"
 @using Service
 @inject IAnimeService AnimeService
 
@@ -13,11 +13,11 @@ else
     <MudTable Items="AnimeList" Hover="true" SortLabel="Sort By" Elevation="0">
         <HeaderContent>
             <MudTh><MudTableSortLabel SortBy="new Func<Anime, object>(x=>x.Title)">Title</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Anime, object>(x=>x.)">Score</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Anime, object>(x=>x.Id)">Score</MudTableSortLabel></MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="Title">@context.Title_English</MudTd>
-            <MudTd DataLabel="Score">@context.Score</MudTd>
+            <MudTd DataLabel="Title">@context.Title</MudTd>
+            <MudTd DataLabel="Score">@context.Id</MudTd>
         </RowTemplate>
         <PagerContent>
             <MudTablePager PageSizeOptions="new int[]{10, 30}" />
@@ -26,11 +26,10 @@ else
 }
 
 @code {
-    IEnumerable<AnimeData> AnimeList;
+    IEnumerable<Anime> AnimeList;
 
     protected override async Task OnInitializedAsync()
     {
         AnimeList = await AnimeService.SetPopularAnime();
     }
 }
- *@

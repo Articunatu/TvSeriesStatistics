@@ -14,7 +14,7 @@
             <MudIconButton Icon="@IconSettings" Color="Color.Default" />
         </CardHeaderActions>
     </MudCardHeader>
-    <MudCardMedia Image="@ImageUrl" Height="250" />
+    <MudImage Src="@ImageUrl" Height="250" Width="400"></MudImage>
     <MudCardContent>
         <MudText Typo="Typo.body2">@CardContent</MudText>
     </MudCardContent>
@@ -26,10 +26,10 @@
 
 @code {
     [Parameter]
-    public string Title { get; set; } = "Urasawa's Monster";
+    public string Title { get; set; } = "";
 
     [Parameter]
-    public string Subtitle { get; set; } = "Heinrich Lunge";
+    public string Subtitle { get; set; } = "";
 
     [Parameter]
     public string AvatarText { get; set; } = "I";
@@ -38,7 +38,7 @@
     public Color AvatarColor { get; set; } = Color.Secondary;
 
     [Parameter]
-    public string ImageUrl { get; set; } = "https://tse1.explicit.bing.net/th?id=OIP.zeDdyQ5syqVVjSp2r68uAAHaFj&pid=Api";
+    public string ImageUrl { get; set; } = "h";
 
     [Parameter]
     public string CardContent { get; set; } = "This photo was taken in a small village in Istra Croatia.";

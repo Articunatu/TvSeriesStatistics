@@ -16,5 +16,12 @@
     </PackageReference>
     <PackageReference Include="MudBlazor" Version="6.*" />
   </ItemGroup>
+
+  
+  <ItemGroup>
+    <Content Update="Components\Layout\MudCakeCard.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+  </ItemGroup>
   
 </Project>
