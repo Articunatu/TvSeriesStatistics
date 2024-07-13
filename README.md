@@ -6,7 +6,7 @@ From a technical perspective this project is made to showcase a view-first struc
 Queries can be written directly in the view components, without commiting to the biggest security risks.
 
 # Tech-Stack
-* Blazor Server App 8
-* MudBlazor for styling
+* Blazor Server App (DotNet 8)
+* MudBlazor (Component library for styling)
 * Microsft SQL Server 
 * EntityFramework
