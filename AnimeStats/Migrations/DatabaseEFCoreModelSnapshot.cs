@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AnimeStats.Migrations
 {
-    [DbContext(typeof(DatabaseEFCore))]
+    [DbContext(typeof(DatabaseEfCore))]
     partial class DatabaseEFCoreModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

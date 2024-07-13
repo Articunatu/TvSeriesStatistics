@@ -1,85 +1,87 @@
 ﻿using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
-public class Repository<T> : IRepository<T> where T : class
+namespace AnimeStats.Service
 {
-    private readonly DbContext _context;
-    private readonly DbSet<T> _dbSet;
-
-    public Repository(DbContext context)
+    public abstract class Repository<T> where T : class
     {
-        _context = context;
-        _dbSet = context.Set<T>();
-    }
+        private readonly DatabaseEFCore db;
+        private readonly DbSet<T> _dbSet;
 
-    public async Task<IEnumerable<T>> GetAllAsync()
-    {
-        return await _dbSet.ToListAsync();
-    }
-
-    public async Task<T> GetByIdAsync(int id)
-    {
-        return await _dbSet.FindAsync(id);
-    }
-
-    public async Task AddAsync(T entity)
-    {
-        await _dbSet.AddAsync(entity);
-        await _context.SaveChangesAsync();
-    }
-
-    public async Task UpdateAsync(T entity)
-    {
-        _dbSet.Attach(entity);
-        _context.Entry(entity).State = EntityState.Modified;
-        await _context.SaveChangesAsync();
-    }
-
-    public async Task PatchAsync(int id, JsonPatchDocument<T> patchDoc)
-    {
-        var entity = await _dbSet.FindAsync(id);
-        if (entity == null)
+        public Repository(DatabaseEFCore database)
         {
-            throw new KeyNotFoundException("Entity not found");
+            db = database;
+            _dbSet = database.Set<T>();
         }
 
-        patchDoc.ApplyTo(entity);
-        await _context.SaveChangesAsync();
-    }
-
-    public async Task DeleteAsync(int id)
-    {
-        var entity = await _dbSet.FindAsync(id);
-        if (entity == null)
+        public async Task<IEnumerable<T>> GetAllAsync()
         {
-            throw new KeyNotFoundException("Entity not found");
+            return await _dbSet.ToListAsync();
         }
 
-        _dbSet.Remove(entity);
-        await _context.SaveChangesAsync();
+        public async Task<T> GetByIdAsync(int id)
+        {
+            return await _dbSet.FindAsync(id);
+        }
+
+        public async Task AddAsync(T entity)
+        {
+            await _dbSet.AddAsync(entity);
+            await db.SaveChangesAsync();
+        }
+
+        public async Task UpdateAsync(T entity)
+        {
+            _dbSet.Attach(entity);
+            db.Entry(entity).State = EntityState.Modified;
+            await db.SaveChangesAsync();
+        }
+
+        public async Task PatchAsync(int id, JsonPatchDocument<T> patchDoc)
+        {
+            var entity = await _dbSet.FindAsync(id);
+            if (entity == null)
+            {
+                throw new KeyNotFoundException("Entity not found");
+            }
+
+            patchDoc.ApplyTo(entity);
+            await db.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            var entity = await _dbSet.FindAsync(id);
+            if (entity == null)
+            {
+                throw new KeyNotFoundException("Entity not found");
+            }
+
+            _dbSet.Remove(entity);
+            await db.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<T>> ReadByQueryAsync(string sqlQuery, params object[] parameters)
+        {
+            return await _dbSet.FromSqlRaw(sqlQuery, parameters).ToListAsync();
+        }
+
+        public async Task WriteQueryAsync(string sqlQuery, params object[] parameters)
+        {
+            await db.Database.ExecuteSqlRawAsync(sqlQuery, parameters);
+            await db.SaveChangesAsync();
+        }
     }
 
-    public async Task<IEnumerable<T>> ReadByQueryAsync(string sqlQuery, params object[] parameters)
+    public interface IRepository<T> where T : class
     {
-        return await _dbSet.FromSqlRaw(sqlQuery, parameters).ToListAsync();
+        Task<IEnumerable<T>> GetAllAsync();
+        Task<T> GetByIdAsync(int id);
+        Task AddAsync(T entity);
+        Task UpdateAsync(T entity);
+        Task PatchAsync(int id, JsonPatchDocument<T> patchDoc);
+        Task DeleteAsync(int id);
+        Task<IEnumerable<T>> ReadByQueryAsync(string sqlQuery, params object[] parameters);
+        Task WriteQueryAsync(string sqlQuery, params object[] parameters);
     }
-
-    public async Task WriteQueryAsync(string sqlQuery, params object[] parameters)
-    {
-        await _context.Database.ExecuteSqlRawAsync(sqlQuery, parameters);
-    }
-}
-
-public interface IRepository<T> where T : class
-{
-    Task<IEnumerable<T>> GetAllAsync();
-    Task<T> GetByIdAsync(int id);
-    Task AddAsync(T entity);
-    Task UpdateAsync(T entity);
-    Task PatchAsync(int id, JsonPatchDocument<T> patchDoc);
-    Task DeleteAsync(int id);
-    Task<IEnumerable<T>> ReadByQueryAsync(string sqlQuery, params object[] parameters);
-    Task WriteQueryAsync(string sqlQuery, params object[] parameters);
 }
