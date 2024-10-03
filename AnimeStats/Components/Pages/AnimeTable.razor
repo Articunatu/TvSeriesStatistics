@@ -1,4 +1,4 @@
-﻿@page "/anime"
+﻿@* @page "/anime"
 @using Service
 @inject IAnimeService AnimeService
 
@@ -33,3 +33,4 @@ else
         AnimeList = await AnimeService.SetPopularAnime();
     }
 }
+ *@

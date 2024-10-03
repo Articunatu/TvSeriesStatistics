@@ -2,7 +2,7 @@ using AnimeStats;
 using AnimeStats.Components;
 using AnimeStats.Service;
 using Microsoft.EntityFrameworkCore;
-using MudBlazor.Services;
+using Blazorise;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,13 +10,19 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-builder.Services.AddMudServices();
+builder.Services
+    .AddBlazorise(options =>
+    {
+        options.Immediate = true;
+    });
 
 builder.Services.AddDbContext<DatabaseEFCore>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DatabaseConnection")));
 
 builder.Services.AddScoped<IAnimeService, AnimeService>();
 builder.Services.AddScoped<IRepository<Anime>, TvRepository>();
+builder.Services.AddHttpClient<ISpotifyService, SpotifyService>();
+
 
 var app = builder.Build();
 

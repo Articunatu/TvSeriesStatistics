@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AnimeStats.Migrations
 {
-    [DbContext(typeof(DatabaseEfCore))]
+    [DbContext(typeof(DatabaseEFCore))]
     [Migration("20240503151259_init")]
     partial class init
     {

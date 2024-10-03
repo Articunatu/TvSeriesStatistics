@@ -1,0 +1,28 @@
+﻿@page "/top-songs"
+@using AnimeStats.Service
+@inject SpotifyService SpotifyService
+
+<h1>Top Songs of the 2000s</h1>
+
+@if (topSongs == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <ul>
+        @foreach (var song in topSongs)
+        {
+            <li>@song.Index. @song.Name - Released: @song.ReleaseDate - Popularity: @song.Popularity</li>
+        }
+    </ul>
+}
+
+@code {
+    private List<Song> topSongs;
+
+    protected override async Task OnInitializedAsync()
+    {
+        topSongs = await SpotifyService.GetTopSongsAsync();
+    }
+}
