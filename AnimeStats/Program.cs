@@ -13,7 +13,7 @@ builder.Services.AddRazorComponents()
 builder.Services.AddMudServices();
 
 builder.Services.AddDbContext<DatabaseEFCore>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DatabaseConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DatabaseConnection")));
 
 builder.Services.AddScoped<IAnimeService, AnimeService>();
 builder.Services.AddScoped<IRepository<Anime>, TvRepository>();

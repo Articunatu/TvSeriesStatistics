@@ -20,9 +20,14 @@
 
   
   <ItemGroup>
-    <Content Update="Components\Layout\MudCakeCard.razor">
+    <Content Update="Components\Layout\TvCard.razor">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
+  </ItemGroup>
+
+  
+  <ItemGroup>
+    <Folder Include="wwwroot\img\gallery\" />
   </ItemGroup>
   
 </Project>
